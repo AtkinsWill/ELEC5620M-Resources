@@ -1,7 +1,5 @@
 
 #include "DE1SoC_Servo.h"
-
-//
 // Driver global static variables (visible only to this .c file)
 //
 
@@ -51,7 +49,6 @@ signed int Servo_initialise( unsigned int base_address )
         if (Servo_invalidID(id)) continue; //Skip any invalid ones
         servo_base_ptr[id] = (20 << (8*SERVO_PERIOD)) | (0 << (8*SERVO_CONTROL));
     }
-    
     //And done
     return SERVO_SUCCESS;
 }

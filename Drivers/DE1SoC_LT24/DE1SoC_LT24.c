@@ -444,15 +444,26 @@ signed int LT24_testPattern(){
 //Copy frame buffer to display
 // - returns 0 if successful
 signed int LT24_copyFrameBuffer(const unsigned short* framebuffer, unsigned int xleft, unsigned int ytop, unsigned int width, unsigned int height)
-{
+{	unsigned int height_it = height;
+	unsigned int width_it = width;
     unsigned int cnt;
+    signed int status;
     //Define Window
-    signed int status = LT24_setWindow(xleft,ytop,width,height);
-    if (status != LT24_SUCCESS) return status;
+
+   // if (status != LT24_SUCCESS) return status;
     //And Copy
-    cnt = (height * width); //How many pixels.
-    while (cnt--) {
-        LT24_write(true, *framebuffer++);
+    //cnt = (height * width); //How many pixels.
+    while (height_it--) {
+    	while (width_it--){
+    		status = LT24_setWindow(
+    				xleft+width-width_it,
+					ytop+height-height_it,
+					1, 1);
+			if (*framebuffer++ != 0x0000){
+				LT24_write(true, *framebuffer);
+			}
+    	}
+    	width_it = width;
     }
     //Done
     return LT24_SUCCESS;

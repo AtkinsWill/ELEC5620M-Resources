@@ -18,3 +18,6 @@ signed int Timer_read_current_time();
 bool Timer_read_interrupt_flag();
 signed int Timer_clear_interrupt();
 
+signed int startTimer(bool timer_flags[]);
+signed int stopTimer(bool timer_flags[]);
+double calculateElapsedTime(signed int start_time, signed int current_time);

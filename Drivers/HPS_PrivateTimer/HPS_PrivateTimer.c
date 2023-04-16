@@ -120,13 +120,42 @@ bool Timer_read_interrupt_flag(){
 
 signed int Timer_clear_interrupt(){
 	volatile unsigned int* interrupt_ptr;
-		if (!Timer_isInitialised()) return TIMER_ERRORNOINIT;
+	if (!Timer_isInitialised()) return TIMER_ERRORNOINIT;
 
-		//If ready,  value
-		interrupt_ptr = (unsigned int*)&timer_base_ptr[TIMER_INTERRUPT];
-		*interrupt_ptr = 0x1;
+	//If ready,  value
+	interrupt_ptr = (unsigned int*)&timer_base_ptr[TIMER_INTERRUPT];
+	*interrupt_ptr = 0x1;
 
-		return TIMER_SUCCESS;
+	return TIMER_SUCCESS;
 }
 
+
+
+signed int startTimer(bool timer_flags[]){
+	timer_flags[2] = true;
+	if (!Timer_isInitialised()) return TIMER_ERRORNOINIT;
+	Timer_set_control_flags(timer_flags[0], timer_flags[1], timer_flags[2]);
+	return Timer_read_current_time();
+}
+
+signed int stopTimer(bool timer_flags[]){
+	timer_flags[2] = false;
+	if (!Timer_isInitialised()) return TIMER_ERRORNOINIT;
+	Timer_set_control_flags(timer_flags[0], timer_flags[1], timer_flags[2]);
+	return Timer_read_current_time();
+}
+
+double calculateElapsedTime(signed int start_time, signed int current_time){
+	double time_difference;
+	if (start_time < current_time){
+		time_difference = (start_time - current_time) + 100000000;
+    }
+	else{
+		time_difference = (start_time - current_time);
+	}
+	time_difference *= 8.889;
+	time_difference /= 1000000000;
+
+	return time_difference;
+}
 
